@@ -36,10 +36,12 @@ moze = Pokemon("Moze", 20)
 
 pokemon = [sean, tanner, moze]
 
-#list of pokemon name strings
+#list of pokemon name strings, unused
+"""
 pokeNames = []
 for poke in pokemon:
     pokeNames.append(poke.name)
+"""
 
 #amount of time to sleep after every message, very jank
 sleepTime = .5
@@ -68,7 +70,6 @@ async def battle(p1, p2, channel):
     p2.resetHP()
 
 #actual discord events
-
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -84,7 +85,33 @@ async def on_message(message):
     #add more stuff here
     if message.content.startswith("!battle"):
         print("battle requested")
-        await battle(sean, moze, message.channel)
+
+        #list of arguments split by a space
+        args = message.content.lower().split()
+        print(args)
+
+        #player names are the 2nd and 3rd arguments
+        try:
+            p1Name = args[1]
+            p2Name = args[2]
+        except IndexError:
+            await client.send_message(message.channel, "Wrong number of arguments")
+            return
+
+        #get pokemon objects from names using list of pokemon
+        for poke in pokemon:
+            if poke.name.lower() == p1Name.lower():
+                p1 = poke
+            elif poke.name.lower() == p2Name.lower():
+                p2 = poke
+
+        #do the battle
+        try:
+            await battle(p1, p2, message.channel)
+        except:
+            await client.send_message(message.channel, "Something went wrong")
+            return
+
         print("battle over")
 
 client.run(token)

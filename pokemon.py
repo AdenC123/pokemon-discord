@@ -34,6 +34,13 @@ sean = Pokemon("Sean", 20)
 tanner = Pokemon("Tanner", 20)
 moze = Pokemon("Moze", 20)
 
+pokemon = [sean, tanner, moze]
+
+#list of pokemon name strings
+pokeNames = []
+for poke in pokemon:
+    pokeNames.append(poke.name)
+
 #amount of time to sleep after every message, very jank
 sleepTime = .5
 

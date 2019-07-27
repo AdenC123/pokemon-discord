@@ -6,6 +6,14 @@ import re
 #get this from discord developer portal, might break
 token = 'NjA0NDAxMzgyNjYxMDI5ODg4.XTtbAA.HVyAzzgRjVTHi2_LjYkVcQ12vIY'
 
+#other variables to change
+#amount of time to sleep after every message, doesnt work very well
+sleepTime = .5
+
+#low and high values for damage, picks a random number between these
+damageMin = 3
+damageMax = 7
+
 #setup discord object
 client = discord.Client()
 
@@ -17,7 +25,7 @@ class Pokemon:
         self.startingHP = startingHP
     
     async def attack(self, opponent, channel):
-        opponent.hp -= random.randint(3,7)
+        opponent.hp -= random.randint(damageMin, damageMax)
         await client.send_message(channel, "{} attacks! {} has {} health!".format(self.name, opponent.name, opponent.hp))
 
     def alive(self):
@@ -42,9 +50,6 @@ pokeNames = []
 for poke in pokemon:
     pokeNames.append(poke.name)
 """
-
-#amount of time to sleep after every message, very jank
-sleepTime = .5
 
 async def battle(p1, p2, channel):
     await client.send_message(channel, "A battle between {} and {}!".format(p1.name, p2.name))

@@ -37,19 +37,19 @@ class Pokemon:
     def resetHP(self):
         self.hp = self.startingHP
 
-#list of pokemon
-sean = Pokemon("Sean", 20)
-tanner = Pokemon("Tanner", 20)
-moze = Pokemon("Moze", 20)
+#create list of pokemon from the mons.txt file
+pokemon = []
 
-pokemon = [sean, tanner, moze]
+mons = open("mons.txt", "r")
 
-#list of pokemon name strings, unused
-"""
-pokeNames = []
-for poke in pokemon:
-    pokeNames.append(poke.name)
-"""
+for line in mons:
+    attributes = line.split()
+    name = attributes[0]
+    health = int(attributes[1])
+    
+    pokemon.append(Pokemon(name, health))
+
+mons.close()
 
 async def battle(p1, p2, channel):
     await client.send_message(channel, "A battle between {} and {}!".format(p1.name, p2.name))

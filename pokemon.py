@@ -4,7 +4,7 @@ import discord
 import re
 
 #get this from discord developer portal, might break
-token = 'NjA0NDAxMzgyNjYxMDI5ODg4.XTtbAA.HVyAzzgRjVTHi2_LjYkVcQ12vIY'
+token = 'NjA0NDAxMzgyNjYxMDI5ODg4.XT6Phg.JvEiaEIYkUsIJbMu7OnxLqtAqWs'
 
 #other variables to change
 #amount of time to sleep after every message, doesnt work very well
@@ -37,14 +37,6 @@ class Pokemon:
     def resetHP(self):
         self.hp = self.startingHP
 
-#function to add a pokemon to the mons.txt file
-def addMon(name, hp):
-    mons = open("mons.txt", "a")
-
-    #start with a newline, then the name and health separated by a space
-    mons.write("\n{} {}".format(name, hp))
-    mons.close()
-
 #create list of pokemon from the mons.txt file
 pokemon = []
 
@@ -59,6 +51,21 @@ for line in mons:
     pokemon.append(Pokemon(name, health))
 
 mons.close()
+
+#function to add a pokemon to the mons.txt file
+def addMon(name, hp):
+    #make hp an int
+    hp = int(hp)
+
+    mons = open("mons.txt", "a")
+
+    #start with a newline, then the name and health separated by a space
+    mons.write("\n{} {}".format(name, hp))
+
+    #add it to the pokemon list
+    pokemon.append(Pokemon(name, hp))
+
+    mons.close()
 
 async def battle(p1, p2, channel):
     await client.send_message(channel, "A battle between {} and {}!".format(p1.name, p2.name))
@@ -120,20 +127,21 @@ async def on_message(message):
                 p2 = poke
 
         #do the battle
-        try:
-            await battle(p1, p2, message.channel)
-        except:
-            await client.send_message(message.channel, "Something went wrong")
-            return
+        #try:
+        await battle(p1, p2, message.channel)
+        #except:
+            #await client.send_message(message.channel, "Something went wrong")
+            #return
 
         print("battle over")
 
-    #add a mon using !add [name] [hp]
+    #add a mon using !add [name] [hp], still needs more type checks and stuff
     if message.content.startswith("!add"):
         args = message.content.lower().split()
         name = args[1]
         hp = args[2]
         addMon(name, hp)
+        await client.send_message(message.channel, "Added {} with {} health".format(name, hp))
 
     if message.content == "!pokehelp":
         await client.send_message(message.channel, "Battles: !battle [p1name] [p2name] \nAdd a new player: !add [name] [hp]")

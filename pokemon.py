@@ -37,6 +37,14 @@ class Pokemon:
     def resetHP(self):
         self.hp = self.startingHP
 
+#function to add a pokemon to the mons.txt file
+def addMon(name, hp):
+    mons = open("mons.txt", "a")
+
+    #start with a newline, then the name and health separated by a space
+    mons.write("\n{} {}".format(name, hp))
+    mons.close()
+
 #create list of pokemon from the mons.txt file
 pokemon = []
 
@@ -46,7 +54,8 @@ for line in mons:
     attributes = line.split()
     name = attributes[0]
     health = int(attributes[1])
-    
+
+    #add pokemon objects to the list
     pokemon.append(Pokemon(name, health))
 
 mons.close()
@@ -87,7 +96,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    #add more stuff here
+    #do a battle using !battle [p1name] [p2name]
     if message.content.startswith("!battle"):
         print("battle requested")
 
@@ -118,5 +127,15 @@ async def on_message(message):
             return
 
         print("battle over")
+
+    #add a mon using !add [name] [hp]
+    if message.content.startswith("!add"):
+        args = message.content.lower().split()
+        name = args[1]
+        hp = args[2]
+        addMon(name, hp)
+
+    if message.content == "!pokehelp":
+        await client.send_message(message.channel, "Battles: !battle [p1name] [p2name] \nAdd a new player: !add [name] [hp]")
 
 client.run(token)

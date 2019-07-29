@@ -4,7 +4,7 @@ import discord
 import re
 
 #get this from discord developer portal, might break
-token = 'NjA0NDAxMzgyNjYxMDI5ODg4.XTtbAA.HVyAzzgRjVTHi2_LjYkVcQ12vIY'
+token = 'bruh'
 
 #other variables to change
 #amount of time to sleep after every message, doesnt work very well

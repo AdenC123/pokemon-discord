@@ -127,11 +127,11 @@ async def on_message(message):
                 p2 = poke
 
         #do the battle
-        #try:
-        await battle(p1, p2, message.channel)
-        #except:
-            #await client.send_message(message.channel, "Something went wrong")
-            #return
+        try:
+            await battle(p1, p2, message.channel)
+        except Exception as e:
+            await client.send_message(message.channel, "Something went wrong, {}".format(e))
+            return
 
         print("battle over")
 
@@ -140,7 +140,18 @@ async def on_message(message):
         args = message.content.lower().split()
         name = args[1]
         hp = args[2]
-        addMon(name, hp)
+        
+        try:
+            addMon(name, hp)
+
+        except IndexError: #wrong amount of arguments
+            await client.send_message(message.channel, "Use it like this you bruh moment:\n!add [name] [hp]\n(also dont put spaces in the name)")
+            return
+
+        except ValueError: #hp isnt an int
+            await client.send_message(message.channel, "The hp has to be a number you bruh moment, use it like this:\n!add [name] [hp]")
+            return
+
         await client.send_message(message.channel, "Added {} with {} health".format(name, hp))
 
     if message.content == "!pokehelp":
